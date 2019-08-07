@@ -1,0 +1,71 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+
+from keras.models import Sequential
+from keras.layers import Conv2D
+from keras.layers import MaxPooling2D
+from keras.layers import Flatten
+from keras.layers import Dense
+from keras.layers import Dropout
+from keras import optimizers
+from keras import regularizers
+from keras.preprocessing.image import ImageDataGenerator
+import tensorflow as tf
+import os
+#from keras import regularizers
+#import cv2
+# =============================================================================
+# #from keras import backend as k
+
+# from skimage.io import imread
+# from skimage.transform import resize
+# import numpy as np
+#  
+# =============================================================================
+
+def classifier(loss, units):
+    adam = optimizers.Adam(lr = 0.005, beta_1 = 0.9, beta_2 = 0.999, epsilon = 10E-8, decay = 0.0, amsgrad = False)
+
+    classifier = Sequential()
+
+
+    classifier.add(Conv2D(32, (3, 3), input_shape = (128, 128, 3),  activation = 'relu', kernel_regularizer = regularizers.l2(0.01)))
+
+    classifier.add(Conv2D(32, (3, 3), activation = 'relu',kernel_regularizer = regularizers.l2(0.01)))
+    classifier.add(MaxPooling2D(pool_size = (2, 2)))
+    
+    classifier.add(Conv2D(64, (3, 3), activation = 'relu',kernel_regularizer = regularizers.l2(0.01)))
+    
+    classifier.add(Conv2D(64, (3, 3), activation = 'relu',kernel_regularizer = regularizers.l2(0.01)))
+    classifier.add(MaxPooling2D(pool_size = (2, 2)))
+    
+    classifier.add(Conv2D(128, (3, 3), input_shape = (128, 128, 3),  activation = 'relu', kernel_regularizer = regularizers.l2(0.01)))
+
+    classifier.add(Conv2D(128, (3, 3), activation = 'relu',kernel_regularizer = regularizers.l2(0.01)))
+    classifier.add(MaxPooling2D(pool_size = (2, 2)))
+    
+    classifier.add(Conv2D(256, (3, 3), input_shape = (128, 128, 3),  activation = 'relu', kernel_regularizer = regularizers.l2(0.01)))
+
+    classifier.add(Conv2D(256, (3, 3), activation = 'relu',kernel_regularizer = regularizers.l2(0.01)))
+    classifier.add(MaxPooling2D(pool_size = (2, 2)))
+
+    classifier.add(Flatten())
+
+    classifier.add(Dense(units = 4096, activation = 'relu', use_bias = True, kernel_regularizer = regularizers.l2(0.01))) 
+ 
+    classifier.add(Dropout(0.4))
+    classifier.add(Dense(units = units, activation = 'sigmoid'))
+
+    classifier.compile(optimizer = adam, loss = loss, metrics = ['accuracy'])
+    
+    return classifier
+
+
+
+
+
+
